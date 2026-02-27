@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة كتلة الجسم BMI</title>
+    <title>حاسبة كتلة الجسم والنظام الغذائي</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Cairo', sans-serif;
@@ -31,428 +27,783 @@
             border-radius: 24px;
             padding: 40px;
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 36px;
-        }
-
-        .header h1 {
-            color: #fff;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
-
-        .gender-selector {
+        /* Language Toggle */
+        .lang-toggle {
             display: flex;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-
-        .gender-btn {
-            flex: 1;
-            padding: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            color: rgba(255, 255, 255, 0.5);
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .gender-btn .icon {
-            font-size: 32px;
-        }
-
-        .gender-btn:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .gender-btn.active {
-            border-color: #6c63ff;
-            background: rgba(108, 99, 255, 0.15);
-            color: #fff;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .input-row input {
-            flex: 1;
-        }
-
-        .input-row .unit {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
-            font-weight: 600;
-            min-width: 30px;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            justify-content: center;
+            margin-bottom: 24px;
+            gap: 4px;
+            background: rgba(255,255,255,0.05);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            padding: 4px;
+        }
+        .lang-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: rgba(255,255,255,0.4);
             font-family: 'Cairo', sans-serif;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 600;
-            outline: none;
-            transition: border-color 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-btn.active {
+            background: rgba(108, 99, 255, 0.3);
+            color: #fff;
         }
 
-        input[type="number"]:focus {
-            border-color: #6c63ff;
-        }
+        .header { text-align: center; margin-bottom: 32px; }
+        .header h1 { color: #fff; font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+        .header p { color: rgba(255,255,255,0.5); font-size: 14px; }
 
-        input[type="number"]::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
-
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .age-input {
+        /* Steps indicator */
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
             margin-bottom: 28px;
         }
-
-        .calculate-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #6c63ff, #4834d4);
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+        .step-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s;
         }
+        .step-dot.active { background: #6c63ff; transform: scale(1.3); }
+        .step-dot.done { background: #2ecc71; }
 
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(108, 99, 255, 0.4);
-        }
-
-        .calculate-btn:active {
-            transform: translateY(0);
-        }
-
-        .result {
-            margin-top: 28px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
+        /* Sections */
+        .section { display: none; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .result.show {
-            display: block;
+        /* Gender */
+        .gender-selector { display: flex; gap: 12px; margin-bottom: 24px; }
+        .gender-btn {
+            flex: 1; padding: 14px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.5);
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px;
         }
+        .gender-btn .icon { font-size: 28px; }
+        .gender-btn:hover { border-color: rgba(255,255,255,0.3); }
+        .gender-btn.active { border-color: #6c63ff; background: rgba(108,99,255,0.15); color: #fff; }
 
-        .bmi-value {
-            font-size: 56px;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1.2;
+        /* Inputs */
+        .input-group { margin-bottom: 18px; }
+        .input-group label {
+            display: block; color: rgba(255,255,255,0.7);
+            font-size: 14px; font-weight: 600; margin-bottom: 6px;
         }
+        .input-row { display: flex; align-items: center; gap: 10px; }
+        .input-row input { flex: 1; }
+        .input-row .unit { color: rgba(255,255,255,0.4); font-size: 14px; font-weight: 600; min-width: 30px; }
 
+        input[type="number"] {
+            width: 100%; padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-size: 17px; font-weight: 600;
+            outline: none; transition: border-color 0.3s;
+        }
+        input[type="number"]:focus { border-color: #6c63ff; }
+        input[type="number"]::placeholder { color: rgba(255,255,255,0.2); }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%; padding: 14px;
+            border: none; border-radius: 14px;
+            background: linear-gradient(135deg, #6c63ff, #4834d4);
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-size: 17px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(108,99,255,0.3);
+            margin-top: 8px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(108,99,255,0.4); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-secondary {
+            width: 100%; padding: 14px;
+            border: 2px solid rgba(108,99,255,0.4);
+            border-radius: 14px; background: transparent;
+            color: #6c63ff; font-family: 'Cairo', sans-serif;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover { background: rgba(108,99,255,0.1); }
+
+        .btn-back {
+            background: none; border: none;
+            color: rgba(255,255,255,0.4); font-family: 'Cairo', sans-serif;
+            font-size: 14px; cursor: pointer;
+            margin-top: 12px; width: 100%;
+            padding: 8px; transition: color 0.3s;
+        }
+        .btn-back:hover { color: rgba(255,255,255,0.7); }
+
+        /* BMI Result */
+        .bmi-value { font-size: 52px; font-weight: 800; color: #fff; text-align: center; line-height: 1.2; }
         .bmi-category {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 8px 0 16px;
-            padding: 8px 24px;
-            border-radius: 50px;
-            display: inline-block;
+            font-size: 18px; font-weight: 700; margin: 8px auto 14px;
+            padding: 6px 22px; border-radius: 50px; display: inline-block;
         }
-
-        .bmi-bar-container {
-            margin: 20px 0;
-            padding: 0 4px;
-        }
-
+        .bmi-bar-container { margin: 18px 0; padding: 0 4px; }
         .bmi-bar {
-            height: 10px;
-            border-radius: 5px;
+            height: 10px; border-radius: 5px;
             background: linear-gradient(to left, #e74c3c, #f39c12, #2ecc71, #f39c12, #e74c3c);
             position: relative;
         }
-
         .bmi-indicator {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #fff;
-            border: 3px solid #6c63ff;
-            position: absolute;
-            top: 50%;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: #fff; border: 3px solid #6c63ff;
+            position: absolute; top: 50%;
             transform: translate(50%, -50%);
             transition: right 0.5s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .bmi-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+        .bmi-labels span { font-size: 11px; color: rgba(255,255,255,0.4); }
+        .bmi-description { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.8; margin-top: 10px; text-align: center; }
+        .bmi-info-row {
+            display: flex; justify-content: space-around;
+            margin: 16px 0; padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+        }
+        .bmi-info-item { text-align: center; }
+        .bmi-info-item .label { font-size: 12px; color: rgba(255,255,255,0.4); }
+        .bmi-info-item .value { font-size: 16px; font-weight: 700; color: #fff; }
+
+        .category-underweight { background: rgba(52,152,219,0.2); color: #3498db; }
+        .category-normal { background: rgba(46,204,113,0.2); color: #2ecc71; }
+        .category-overweight { background: rgba(243,156,18,0.2); color: #f39c12; }
+        .category-obese { background: rgba(231,76,60,0.2); color: #e74c3c; }
+
+        /* Option chips */
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+        .chip {
+            padding: 10px 18px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.6);
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+            user-select: none;
+        }
+        .chip:hover { border-color: rgba(255,255,255,0.3); }
+        .chip.selected { border-color: #6c63ff; background: rgba(108,99,255,0.2); color: #fff; }
+
+        .section-title {
+            color: #fff; font-size: 18px; font-weight: 700;
+            margin-bottom: 14px; text-align: center;
+        }
+        .section-subtitle {
+            color: rgba(255,255,255,0.5); font-size: 13px;
+            margin-bottom: 16px; text-align: center;
         }
 
-        .bmi-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            direction: rtl;
+        /* Meal Plan */
+        .meal-plan { margin-top: 16px; }
+        .day-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 18px;
+            margin-bottom: 12px;
+        }
+        .day-title {
+            color: #6c63ff; font-size: 16px; font-weight: 700;
+            margin-bottom: 12px; text-align: center;
+        }
+        .meal-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .meal-item:last-child { border-bottom: none; }
+        .meal-label {
+            color: rgba(255,255,255,0.5); font-size: 12px;
+            font-weight: 600; margin-bottom: 4px;
+        }
+        .meal-content { color: #fff; font-size: 14px; line-height: 1.6; }
+        .meal-calories {
+            color: rgba(255,255,255,0.3); font-size: 12px; margin-top: 2px;
+        }
+        .total-calories {
+            text-align: center; margin-top: 16px; padding: 14px;
+            background: rgba(108,99,255,0.1); border-radius: 12px;
+        }
+        .total-calories .label { color: rgba(255,255,255,0.5); font-size: 13px; }
+        .total-calories .value { color: #6c63ff; font-size: 22px; font-weight: 800; }
+
+        .disclaimer {
+            text-align: center; margin-top: 16px;
+            color: rgba(255,255,255,0.3); font-size: 11px;
+            line-height: 1.6; padding: 0 10px;
         }
 
-        .bmi-labels span {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .bmi-description {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            line-height: 1.8;
-            margin-top: 12px;
-        }
-
-        .category-underweight { background: rgba(52, 152, 219, 0.2); color: #3498db; }
-        .category-normal { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
-        .category-overweight { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
-        .category-obese { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
-
-        .footer {
-            text-align: center;
-            margin-top: 24px;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 12px;
-        }
+        .footer { text-align: center; margin-top: 20px; color: rgba(255,255,255,0.2); font-size: 12px; }
 
         @media (max-width: 500px) {
-            .container {
-                padding: 28px 20px;
-            }
-            .header h1 {
-                font-size: 24px;
-            }
-            .bmi-value {
-                font-size: 44px;
-            }
+            .container { padding: 24px 18px; }
+            .header h1 { font-size: 22px; }
+            .bmi-value { font-size: 42px; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>حاسبة كتلة الجسم</h1>
-            <p>احسب مؤشر كتلة جسمك بسهولة</p>
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
         </div>
 
-        <div class="gender-selector">
-            <button class="gender-btn active" onclick="selectGender(this, 'male')">
-                <span class="icon">&#9794;</span>
-                ذكر
-            </button>
-            <button class="gender-btn" onclick="selectGender(this, 'female')">
-                <span class="icon">&#9792;</span>
-                أنثى
-            </button>
+        <!-- Steps Indicator -->
+        <div class="steps-indicator">
+            <div class="step-dot active" id="dot-0"></div>
+            <div class="step-dot" id="dot-1"></div>
+            <div class="step-dot" id="dot-2"></div>
+            <div class="step-dot" id="dot-3"></div>
         </div>
 
-        <div class="input-group">
-            <label>الطول</label>
-            <div class="input-row">
-                <input type="number" id="height" placeholder="170" min="50" max="250">
-                <span class="unit">سم</span>
+        <!-- STEP 0: BMI Calculator -->
+        <div class="section active" id="step-0">
+            <div class="header">
+                <h1 data-ar="حاسبة كتلة الجسم" data-en="BMI Calculator"></h1>
+                <p data-ar="احسب مؤشر كتلة جسمك بسهولة" data-en="Calculate your Body Mass Index easily"></p>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>الوزن</label>
-            <div class="input-row">
-                <input type="number" id="weight" placeholder="70" min="10" max="300">
-                <span class="unit">كجم</span>
+            <div class="gender-selector">
+                <button class="gender-btn active" onclick="selectGender(this,'male')">
+                    <span class="icon">&#9794;</span>
+                    <span data-ar="ذكر" data-en="Male"></span>
+                </button>
+                <button class="gender-btn" onclick="selectGender(this,'female')">
+                    <span class="icon">&#9792;</span>
+                    <span data-ar="أنثى" data-en="Female"></span>
+                </button>
             </div>
-        </div>
 
-        <div class="input-group age-input">
-            <label>العمر</label>
-            <div class="input-row">
-                <input type="number" id="age" placeholder="25" min="2" max="120">
-                <span class="unit">سنة</span>
+            <div class="input-group">
+                <label data-ar="الطول" data-en="Height"></label>
+                <div class="input-row">
+                    <input type="number" id="height" placeholder="170" min="50" max="250">
+                    <span class="unit" data-ar="سم" data-en="cm"></span>
+                </div>
             </div>
+
+            <div class="input-group">
+                <label data-ar="الوزن" data-en="Weight"></label>
+                <div class="input-row">
+                    <input type="number" id="weight" placeholder="70" min="10" max="300">
+                    <span class="unit" data-ar="كجم" data-en="kg"></span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label data-ar="العمر" data-en="Age"></label>
+                <div class="input-row">
+                    <input type="number" id="age" placeholder="25" min="2" max="120">
+                    <span class="unit" data-ar="سنة" data-en="yrs"></span>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="calculateBMI()" data-ar="احسب" data-en="Calculate"></button>
         </div>
 
-        <button class="calculate-btn" onclick="calculateBMI()">احسب</button>
-
-        <div class="result" id="result">
+        <!-- STEP 1: BMI Result -->
+        <div class="section" id="step-1">
+            <div class="header">
+                <h1 data-ar="نتيجتك" data-en="Your Result"></h1>
+            </div>
             <div class="bmi-value" id="bmiValue">0</div>
-            <div class="bmi-category" id="bmiCategory">-</div>
+            <div style="text-align:center">
+                <div class="bmi-category" id="bmiCategory">-</div>
+            </div>
 
             <div class="bmi-bar-container">
                 <div class="bmi-bar">
                     <div class="bmi-indicator" id="bmiIndicator"></div>
                 </div>
                 <div class="bmi-labels">
-                    <span>نحيف</span>
-                    <span>طبيعي</span>
-                    <span>زيادة</span>
-                    <span>سمنة</span>
+                    <span data-ar="نحيف" data-en="Under"></span>
+                    <span data-ar="طبيعي" data-en="Normal"></span>
+                    <span data-ar="زيادة" data-en="Over"></span>
+                    <span data-ar="سمنة" data-en="Obese"></span>
+                </div>
+            </div>
+
+            <div class="bmi-info-row">
+                <div class="bmi-info-item">
+                    <div class="label" data-ar="الوزن المثالي" data-en="Ideal Weight"></div>
+                    <div class="value" id="idealWeight">-</div>
+                </div>
+                <div class="bmi-info-item">
+                    <div class="label" data-ar="السعرات اليومية" data-en="Daily Calories"></div>
+                    <div class="value" id="dailyCal">-</div>
                 </div>
             </div>
 
             <div class="bmi-description" id="bmiDescription"></div>
+
+            <button class="btn-primary" onclick="goToStep(2)" data-ar="سوّ لي نظام غذائي" data-en="Create My Diet Plan"></button>
+            <button class="btn-back" onclick="goToStep(0)" data-ar="رجوع" data-en="Back"></button>
         </div>
 
-        <div class="footer">
-            حاسبة كتلة الجسم &mdash; BMI Calculator
+        <!-- STEP 2: Diet Preferences -->
+        <div class="section" id="step-2">
+            <div class="section-title" data-ar="خصّص نظامك الغذائي" data-en="Customize Your Diet"></div>
+
+            <div class="section-subtitle" data-ar="وش هدفك؟" data-en="What's your goal?"></div>
+            <div class="chips" id="goalChips">
+                <div class="chip selected" data-value="lose" data-ar="إنقاص الوزن" data-en="Lose Weight"></div>
+                <div class="chip" data-value="maintain" data-ar="الحفاظ على الوزن" data-en="Maintain Weight"></div>
+                <div class="chip" data-value="gain" data-ar="زيادة الوزن" data-en="Gain Weight"></div>
+            </div>
+
+            <div class="section-subtitle" data-ar="كم وجبة تبي باليوم؟" data-en="How many meals per day?"></div>
+            <div class="chips" id="mealCountChips">
+                <div class="chip" data-value="2" data-ar="وجبتين" data-en="2 Meals"></div>
+                <div class="chip selected" data-value="3" data-ar="٣ وجبات" data-en="3 Meals"></div>
+                <div class="chip" data-value="3s" data-ar="٣ وجبات + سناك" data-en="3 Meals + Snacks"></div>
+            </div>
+
+            <div class="section-subtitle" data-ar="أكلك المفضل؟" data-en="Food preferences?"></div>
+            <div class="chips multi" id="foodChips">
+                <div class="chip selected" data-value="chicken" data-ar="دجاج" data-en="Chicken"></div>
+                <div class="chip selected" data-value="meat" data-ar="لحم" data-en="Meat"></div>
+                <div class="chip" data-value="fish" data-ar="سمك" data-en="Fish"></div>
+                <div class="chip" data-value="eggs" data-ar="بيض" data-en="Eggs"></div>
+                <div class="chip" data-value="rice" data-ar="رز" data-en="Rice"></div>
+                <div class="chip" data-value="bread" data-ar="خبز" data-en="Bread"></div>
+                <div class="chip" data-value="pasta" data-ar="معكرونة" data-en="Pasta"></div>
+                <div class="chip" data-value="salad" data-ar="سلطة" data-en="Salad"></div>
+                <div class="chip" data-value="fruits" data-ar="فواكه" data-en="Fruits"></div>
+                <div class="chip" data-value="oats" data-ar="شوفان" data-en="Oats"></div>
+            </div>
+
+            <div class="section-subtitle" data-ar="عندك حساسية من شي؟" data-en="Any allergies?"></div>
+            <div class="chips multi" id="allergyChips">
+                <div class="chip" data-value="none" data-ar="لا يوجد" data-en="None"></div>
+                <div class="chip" data-value="dairy" data-ar="ألبان" data-en="Dairy"></div>
+                <div class="chip" data-value="gluten" data-ar="جلوتين" data-en="Gluten"></div>
+                <div class="chip" data-value="nuts" data-ar="مكسرات" data-en="Nuts"></div>
+                <div class="chip" data-value="eggs" data-ar="بيض" data-en="Eggs"></div>
+                <div class="chip" data-value="seafood" data-ar="مأكولات بحرية" data-en="Seafood"></div>
+            </div>
+
+            <button class="btn-primary" onclick="generateMealPlan()" data-ar="جهّز النظام" data-en="Generate Plan"></button>
+            <button class="btn-back" onclick="goToStep(1)" data-ar="رجوع" data-en="Back"></button>
         </div>
+
+        <!-- STEP 3: Meal Plan -->
+        <div class="section" id="step-3">
+            <div class="section-title" data-ar="نظامك الغذائي" data-en="Your Meal Plan"></div>
+            <div class="section-subtitle" id="planSubtitle"></div>
+
+            <div class="total-calories">
+                <div class="label" data-ar="السعرات اليومية المطلوبة" data-en="Daily Calories Target"></div>
+                <div class="value" id="targetCal">-</div>
+            </div>
+
+            <div class="meal-plan" id="mealPlan"></div>
+
+            <div class="disclaimer" data-ar="هذا النظام تقديري وللاسترشاد فقط. يُنصح بمراجعة أخصائي تغذية للحصول على خطة مخصصة." data-en="This plan is an estimate for guidance only. Consult a nutritionist for a personalized plan."></div>
+
+            <button class="btn-secondary" onclick="generateMealPlan()" data-ar="جدول ثاني" data-en="New Plan"></button>
+            <button class="btn-back" onclick="goToStep(2)" data-ar="تعديل الخيارات" data-en="Edit Preferences"></button>
+            <button class="btn-back" onclick="goToStep(0)" data-ar="حساب جديد" data-en="New Calculation"></button>
+        </div>
+
+        <div class="footer">BMI & Diet Planner</div>
     </div>
 
-    <script>
-        let selectedGender = 'male';
+<script>
+// ===== State =====
+let lang = 'ar';
+let selectedGender = 'male';
+let currentStep = 0;
+let userData = {};
 
-        function selectGender(btn, gender) {
-            document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedGender = gender;
-        }
+// ===== Language =====
+function setLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn:${l === 'ar' ? 'first' : 'last'}-child`).classList.add('active');
+    document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = l;
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        const text = el.getAttribute(`data-${l}`);
+        if (el.tagName === 'INPUT') el.placeholder = text;
+        else el.textContent = text;
+    });
+}
 
-        function calculateBMI() {
-            const height = parseFloat(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
-            const age = parseFloat(document.getElementById('age').value);
+// ===== Steps =====
+function goToStep(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+    document.querySelectorAll('.step-dot').forEach((d, i) => {
+        d.classList.remove('active', 'done');
+        if (i < n) d.classList.add('done');
+        if (i === n) d.classList.add('active');
+    });
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-            if (!height || !weight || !age) {
-                shakeButton();
-                return;
-            }
+// ===== Gender =====
+function selectGender(btn, gender) {
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedGender = gender;
+}
 
-            if (height < 50 || height > 250 || weight < 10 || weight > 300 || age < 2 || age > 120) {
-                shakeButton();
-                return;
-            }
-
-            const heightM = height / 100;
-            const bmi = weight / (heightM * heightM);
-            const bmiRounded = Math.round(bmi * 10) / 10;
-
-            let category, categoryClass, description;
-
-            if (bmi < 18.5) {
-                category = 'نقص في الوزن';
-                categoryClass = 'category-underweight';
-                description = 'وزنك أقل من الطبيعي. حاول زيادة وزنك بتناول وجبات صحية ومتوازنة غنية بالبروتين والكربوهيدرات.';
-            } else if (bmi < 25) {
-                category = 'وزن طبيعي';
-                categoryClass = 'category-normal';
-                description = 'وزنك مثالي! حافظ على نمط حياتك الصحي واستمر في ممارسة الرياضة والتغذية المتوازنة.';
-            } else if (bmi < 30) {
-                category = 'زيادة في الوزن';
-                categoryClass = 'category-overweight';
-                description = 'لديك زيادة في الوزن. حاول ممارسة الرياضة بانتظام وتقليل السعرات الحرارية مع اتباع نظام غذائي صحي.';
-            } else {
-                category = 'سمنة';
-                categoryClass = 'category-obese';
-                description = 'لديك سمنة. يُنصح بمراجعة طبيب أو أخصائي تغذية لوضع خطة مناسبة لإنقاص الوزن بطريقة صحية.';
-            }
-
-            const resultEl = document.getElementById('result');
-            const bmiValueEl = document.getElementById('bmiValue');
-            const bmiCategoryEl = document.getElementById('bmiCategory');
-            const bmiDescEl = document.getElementById('bmiDescription');
-            const bmiIndicator = document.getElementById('bmiIndicator');
-
-            resultEl.classList.add('show');
-
-            animateValue(bmiValueEl, 0, bmiRounded, 600);
-
-            bmiCategoryEl.textContent = category;
-            bmiCategoryEl.className = 'bmi-category ' + categoryClass;
-
-            bmiDescEl.textContent = description;
-
-            const minBMI = 15;
-            const maxBMI = 40;
-            let position = ((bmi - minBMI) / (maxBMI - minBMI)) * 100;
-            position = Math.max(2, Math.min(98, position));
-            bmiIndicator.style.right = position + '%';
-
-            resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function animateValue(el, start, end, duration) {
-            let startTime = null;
-            function update(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const progress = Math.min((timestamp - startTime) / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const current = start + (end - start) * eased;
-                el.textContent = current.toFixed(1);
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
-            }
-            requestAnimationFrame(update);
-        }
-
-        function shakeButton() {
-            const btn = document.querySelector('.calculate-btn');
-            btn.style.animation = 'shake 0.4s ease';
-            setTimeout(() => btn.style.animation = '', 400);
-        }
-
-        const shakeStyle = document.createElement('style');
-        shakeStyle.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-8px); }
-                75% { transform: translateX(8px); }
-            }
-        `;
-        document.head.appendChild(shakeStyle);
-
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') calculateBMI();
-            });
+// ===== Chips =====
+document.querySelectorAll('.chips:not(.multi)').forEach(container => {
+    container.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
         });
-    </script>
+    });
+});
+document.querySelectorAll('.chips.multi').forEach(container => {
+    container.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            if (chip.dataset.value === 'none') {
+                container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+            } else {
+                container.querySelector('[data-value="none"]')?.classList.remove('selected');
+                chip.classList.toggle('selected');
+            }
+        });
+    });
+});
+
+function getSelected(containerId) {
+    return [...document.querySelectorAll(`#${containerId} .chip.selected`)].map(c => c.dataset.value);
+}
+
+// ===== BMI =====
+function calculateBMI() {
+    const height = parseFloat(document.getElementById('height').value);
+    const weight = parseFloat(document.getElementById('weight').value);
+    const age = parseFloat(document.getElementById('age').value);
+
+    if (!height || !weight || !age || height < 50 || height > 250 || weight < 10 || weight > 300 || age < 2 || age > 120) {
+        const btn = document.querySelector('#step-0 .btn-primary');
+        btn.style.animation = 'shake 0.4s ease';
+        setTimeout(() => btn.style.animation = '', 400);
+        return;
+    }
+
+    const heightM = height / 100;
+    const bmi = weight / (heightM * heightM);
+    const bmiR = Math.round(bmi * 10) / 10;
+
+    // Ideal weight (BMI 22)
+    const idealW = Math.round(22 * heightM * heightM);
+
+    // BMR (Mifflin-St Jeor)
+    let bmr;
+    if (selectedGender === 'male') bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    else bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    const tdee = Math.round(bmr * 1.55);
+
+    userData = { height, weight, age, gender: selectedGender, bmi: bmiR, idealWeight: idealW, tdee, bmr };
+
+    let cat, catClass, desc;
+    if (lang === 'ar') {
+        if (bmi < 18.5) { cat = 'نقص في الوزن'; catClass = 'category-underweight'; desc = 'وزنك أقل من الطبيعي. حاول زيادة وزنك بتناول وجبات صحية غنية بالبروتين.'; }
+        else if (bmi < 25) { cat = 'وزن طبيعي'; catClass = 'category-normal'; desc = 'وزنك مثالي! حافظ على نمط حياتك الصحي.'; }
+        else if (bmi < 30) { cat = 'زيادة في الوزن'; catClass = 'category-overweight'; desc = 'لديك زيادة في الوزن. حاول ممارسة الرياضة وتقليل السعرات.'; }
+        else { cat = 'سمنة'; catClass = 'category-obese'; desc = 'يُنصح بمراجعة أخصائي تغذية لوضع خطة لإنقاص الوزن.'; }
+    } else {
+        if (bmi < 18.5) { cat = 'Underweight'; catClass = 'category-underweight'; desc = 'You are underweight. Try eating healthy, protein-rich meals.'; }
+        else if (bmi < 25) { cat = 'Normal'; catClass = 'category-normal'; desc = 'Your weight is ideal! Keep up your healthy lifestyle.'; }
+        else if (bmi < 30) { cat = 'Overweight'; catClass = 'category-overweight'; desc = 'You are overweight. Try exercising and reducing calories.'; }
+        else { cat = 'Obese'; catClass = 'category-obese'; desc = 'Consider consulting a nutritionist for a weight loss plan.'; }
+    }
+
+    goToStep(1);
+
+    animateValue(document.getElementById('bmiValue'), 0, bmiR, 600);
+    document.getElementById('bmiCategory').textContent = cat;
+    document.getElementById('bmiCategory').className = 'bmi-category ' + catClass;
+    document.getElementById('bmiDescription').textContent = desc;
+    document.getElementById('idealWeight').textContent = idealW + (lang === 'ar' ? ' كجم' : ' kg');
+    document.getElementById('dailyCal').textContent = tdee;
+
+    const minBMI = 15, maxBMI = 40;
+    let pos = ((bmi - minBMI) / (maxBMI - minBMI)) * 100;
+    pos = Math.max(2, Math.min(98, pos));
+    document.getElementById('bmiIndicator').style.right = pos + '%';
+}
+
+function animateValue(el, start, end, dur) {
+    let t0 = null;
+    function tick(ts) {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / dur, 1);
+        el.textContent = (start + (end - start) * (1 - Math.pow(1 - p, 3))).toFixed(1);
+        if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+}
+
+// ===== Meal Plan Generator =====
+const mealDB = {
+    breakfast: {
+        chicken: [
+            { ar: 'ساندويتش دجاج مشوي مع خضار', en: 'Grilled chicken sandwich with veggies', cal: 350 },
+            { ar: 'راب دجاج مع خس وطماطم', en: 'Chicken wrap with lettuce & tomato', cal: 320 },
+        ],
+        meat: [
+            { ar: 'شريحة لحم مع خبز توست وأفوكادو', en: 'Steak slice with toast & avocado', cal: 400 },
+        ],
+        fish: [
+            { ar: 'تونة مع خبز أسمر وخضار', en: 'Tuna with brown bread & veggies', cal: 300 },
+        ],
+        eggs: [
+            { ar: 'بيض مخفوق مع خبز توست', en: 'Scrambled eggs with toast', cal: 300 },
+            { ar: 'أومليت بالخضار والجبن', en: 'Veggie cheese omelette', cal: 320 },
+            { ar: 'بيض مسلوق مع أفوكادو وخبز', en: 'Boiled eggs with avocado & bread', cal: 340 },
+        ],
+        oats: [
+            { ar: 'شوفان بالحليب والموز والعسل', en: 'Oatmeal with milk, banana & honey', cal: 350 },
+            { ar: 'شوفان بالتوت وزبدة الفول السوداني', en: 'Oats with berries & peanut butter', cal: 380 },
+        ],
+        fruits: [
+            { ar: 'سموذي فواكه مع زبادي يوناني', en: 'Fruit smoothie with Greek yogurt', cal: 280 },
+            { ar: 'سلطة فواكه مع جرانولا وعسل', en: 'Fruit salad with granola & honey', cal: 300 },
+        ],
+        default: [
+            { ar: 'زبادي يوناني مع عسل ومكسرات', en: 'Greek yogurt with honey & nuts', cal: 300 },
+            { ar: 'خبز أسمر مع جبن وخضار', en: 'Brown bread with cheese & veggies', cal: 280 },
+        ]
+    },
+    lunch: {
+        chicken: [
+            { ar: 'صدور دجاج مشوية مع رز بني وسلطة', en: 'Grilled chicken breast with brown rice & salad', cal: 500 },
+            { ar: 'دجاج متبل بالفرن مع خضار مشوية', en: 'Oven-baked seasoned chicken with roasted veggies', cal: 480 },
+            { ar: 'شاورما دجاج صحية مع خبز أسمر', en: 'Healthy chicken shawarma with brown bread', cal: 450 },
+        ],
+        meat: [
+            { ar: 'ستيك لحم مشوي مع بطاطا حلوة', en: 'Grilled steak with sweet potato', cal: 550 },
+            { ar: 'كفتة لحم مشوية مع رز وسلطة', en: 'Grilled kofta with rice & salad', cal: 520 },
+            { ar: 'يخنة لحم مع خضار وأرز', en: 'Beef stew with veggies & rice', cal: 500 },
+        ],
+        fish: [
+            { ar: 'سمك سلمون مشوي مع خضار وليمون', en: 'Grilled salmon with veggies & lemon', cal: 450 },
+            { ar: 'سمك فيليه بالفرن مع أرز', en: 'Baked fish fillet with rice', cal: 420 },
+        ],
+        rice: [
+            { ar: 'أرز بالخضار واللحم المفروم', en: 'Rice with veggies & ground meat', cal: 500 },
+            { ar: 'كبسة صحية بالدجاج', en: 'Healthy chicken kabsa', cal: 520 },
+        ],
+        pasta: [
+            { ar: 'معكرونة بصوص الطماطم والدجاج', en: 'Pasta with tomato sauce & chicken', cal: 480 },
+            { ar: 'معكرونة بالخضار وزيت الزيتون', en: 'Pasta with veggies & olive oil', cal: 420 },
+        ],
+        salad: [
+            { ar: 'سلطة سيزر بالدجاج المشوي', en: 'Caesar salad with grilled chicken', cal: 380 },
+            { ar: 'سلطة يونانية مع جبن فيتا وزيتون', en: 'Greek salad with feta & olives', cal: 350 },
+        ],
+        default: [
+            { ar: 'طبق متوازن: بروتين مع نشويات وخضار', en: 'Balanced plate: protein, carbs & veggies', cal: 480 },
+        ]
+    },
+    dinner: {
+        chicken: [
+            { ar: 'شوربة دجاج مع خضار وخبز أسمر', en: 'Chicken soup with veggies & brown bread', cal: 350 },
+            { ar: 'سلطة دجاج مشوي مع صوص خفيف', en: 'Grilled chicken salad with light dressing', cal: 320 },
+        ],
+        meat: [
+            { ar: 'شوربة لحم بالخضار', en: 'Beef vegetable soup', cal: 350 },
+            { ar: 'لحم مشوي مع سلطة خضراء', en: 'Grilled meat with green salad', cal: 380 },
+        ],
+        fish: [
+            { ar: 'سمك مشوي خفيف مع سلطة', en: 'Light grilled fish with salad', cal: 300 },
+        ],
+        eggs: [
+            { ar: 'بيض مسلوق مع سلطة خضراء وخبز', en: 'Boiled eggs with green salad & bread', cal: 280 },
+            { ar: 'شكشوكة خفيفة مع خبز أسمر', en: 'Light shakshuka with brown bread', cal: 320 },
+        ],
+        salad: [
+            { ar: 'سلطة تونة مع خضار وليمون', en: 'Tuna salad with veggies & lemon', cal: 280 },
+        ],
+        default: [
+            { ar: 'شوربة خضار مع خبز أسمر', en: 'Vegetable soup with brown bread', cal: 250 },
+            { ar: 'زبادي مع خيار وشوية خبز', en: 'Yogurt with cucumber & some bread', cal: 220 },
+        ]
+    },
+    snack: {
+        fruits: [
+            { ar: 'تفاحة مع ملعقة زبدة فول سوداني', en: 'Apple with a spoon of peanut butter', cal: 180 },
+            { ar: 'موزة مع حفنة لوز', en: 'Banana with handful of almonds', cal: 200 },
+        ],
+        oats: [
+            { ar: 'بار شوفان صحي', en: 'Healthy oat bar', cal: 150 },
+        ],
+        default: [
+            { ar: 'حفنة مكسرات نيئة', en: 'Handful of raw nuts', cal: 170 },
+            { ar: 'زبادي مع عسل', en: 'Yogurt with honey', cal: 150 },
+            { ar: 'خضار مقطعة مع حمص', en: 'Cut veggies with hummus', cal: 130 },
+            { ar: 'تمر مع قهوة', en: 'Dates with coffee', cal: 120 },
+            { ar: 'فشار بدون زبدة', en: 'Popcorn without butter', cal: 100 },
+        ]
+    }
+};
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function getMeal(mealType, prefs, allergies) {
+    let options = [];
+    prefs.forEach(p => {
+        if (mealDB[mealType][p]) options.push(...mealDB[mealType][p]);
+    });
+    if (options.length === 0) options = mealDB[mealType].default || [];
+
+    // Filter allergies
+    if (allergies.includes('dairy')) options = options.filter(m => !/(زبادي|جبن|حليب|yogurt|cheese|milk|dairy)/i.test(m.ar + m.en));
+    if (allergies.includes('gluten')) options = options.filter(m => !/(خبز|معكرونة|شوفان|bread|pasta|oat|toast|wrap)/i.test(m.ar + m.en));
+    if (allergies.includes('nuts')) options = options.filter(m => !/(مكسرات|لوز|فول سوداني|nut|almond|peanut)/i.test(m.ar + m.en));
+    if (allergies.includes('eggs')) options = options.filter(m => !/(بيض|أومليت|شكشوكة|egg|omelette|shakshuka)/i.test(m.ar + m.en));
+    if (allergies.includes('seafood')) options = options.filter(m => !/(سمك|تونة|سلمون|fish|tuna|salmon|seafood)/i.test(m.ar + m.en));
+
+    if (options.length === 0) options = mealDB[mealType].default || [{ ar: 'وجبة صحية متوازنة', en: 'Healthy balanced meal', cal: 400 }];
+    return pickRandom(options);
+}
+
+function generateMealPlan() {
+    const goal = getSelected('goalChips')[0] || 'maintain';
+    const mealCount = getSelected('mealCountChips')[0] || '3';
+    const foods = getSelected('foodChips');
+    const allergies = getSelected('allergyChips');
+
+    let targetCal = userData.tdee || 2000;
+    if (goal === 'lose') targetCal = Math.round(targetCal * 0.8);
+    else if (goal === 'gain') targetCal = Math.round(targetCal * 1.15);
+
+    const goalText = {
+        lose: { ar: 'إنقاص الوزن', en: 'Weight Loss' },
+        maintain: { ar: 'الحفاظ على الوزن', en: 'Weight Maintenance' },
+        gain: { ar: 'زيادة الوزن', en: 'Weight Gain' }
+    };
+
+    document.getElementById('planSubtitle').textContent = lang === 'ar'
+        ? `هدفك: ${goalText[goal].ar}`
+        : `Goal: ${goalText[goal].en}`;
+    document.getElementById('targetCal').textContent = targetCal + (lang === 'ar' ? ' سعرة' : ' cal');
+
+    const hasSnack = mealCount === '3s';
+    const numMeals = mealCount === '2' ? 2 : 3;
+
+    const days = lang === 'ar'
+        ? ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة']
+        : ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+    const mealLabels = {
+        breakfast: { ar: 'الفطور', en: 'Breakfast' },
+        lunch: { ar: 'الغداء', en: 'Lunch' },
+        dinner: { ar: 'العشاء', en: 'Dinner' },
+        snack: { ar: 'سناك', en: 'Snack' }
+    };
+
+    let html = '';
+    days.forEach(day => {
+        html += `<div class="day-card"><div class="day-title">${day}</div>`;
+        let dayTotal = 0;
+
+        if (numMeals >= 2) {
+            const b = getMeal('breakfast', foods, allergies);
+            const bCal = scaleCal(b.cal, targetCal, numMeals, hasSnack, 'breakfast');
+            dayTotal += bCal;
+            html += mealHTML(mealLabels.breakfast[lang], b[lang], bCal);
+        }
+
+        const l = getMeal('lunch', foods, allergies);
+        const lCal = scaleCal(l.cal, targetCal, numMeals, hasSnack, 'lunch');
+        dayTotal += lCal;
+        html += mealHTML(mealLabels.lunch[lang], l[lang], lCal);
+
+        if (numMeals >= 3) {
+            const d = getMeal('dinner', foods, allergies);
+            const dCal = scaleCal(d.cal, targetCal, numMeals, hasSnack, 'dinner');
+            dayTotal += dCal;
+            html += mealHTML(mealLabels.dinner[lang], d[lang], dCal);
+        }
+
+        if (hasSnack) {
+            const s = getMeal('snack', foods, allergies);
+            const sCal = scaleCal(s.cal, targetCal, numMeals, hasSnack, 'snack');
+            dayTotal += sCal;
+            html += mealHTML(mealLabels.snack[lang], s[lang], sCal);
+        }
+
+        html += `<div class="meal-calories" style="text-align:center;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08)">
+            ${lang === 'ar' ? 'المجموع' : 'Total'}: ${dayTotal} ${lang === 'ar' ? 'سعرة' : 'cal'}</div>`;
+        html += '</div>';
+    });
+
+    document.getElementById('mealPlan').innerHTML = html;
+    goToStep(3);
+}
+
+function scaleCal(baseCal, target, numMeals, hasSnack, type) {
+    const ratios = { breakfast: 0.25, lunch: 0.4, dinner: 0.25, snack: 0.1 };
+    if (!hasSnack) { ratios.breakfast = 0.3; ratios.lunch = 0.4; ratios.dinner = 0.3; ratios.snack = 0; }
+    if (numMeals === 2) { ratios.breakfast = 0.4; ratios.lunch = 0.6; ratios.dinner = 0; ratios.snack = 0; }
+    return Math.round(target * ratios[type]);
+}
+
+function mealHTML(label, content, cal) {
+    return `<div class="meal-item">
+        <div class="meal-label">${label}</div>
+        <div class="meal-content">${content}</div>
+        <div class="meal-calories">${cal} ${lang === 'ar' ? 'سعرة' : 'cal'}</div>
+    </div>`;
+}
+
+// Enter key
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') calculateBMI(); });
+});
+
+// Init language
+setLang('ar');
+</script>
 </body>
 </html>
