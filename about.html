@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عن الموقع - حاسبة كتلة الجسم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh; padding: 20px;
+        }
+        nav {
+            display: flex; justify-content: center; gap: 8px;
+            padding: 16px; flex-wrap: wrap;
+        }
+        nav a {
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 14px; font-weight: 600;
+            padding: 8px 18px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        nav a:hover, nav a.active {
+            color: #fff; border-color: #6c63ff;
+            background: rgba(108,99,255,0.15);
+        }
+        .container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 40px;
+            max-width: 700px; margin: 20px auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #fff; font-size: 28px; text-align: center; margin-bottom: 24px; }
+        h2 { color: #6c63ff; font-size: 18px; margin: 24px 0 10px; }
+        p { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.9; margin-bottom: 12px; }
+        .feature-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin: 20px 0;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 20px; text-align: center;
+        }
+        .feature-card .icon { font-size: 32px; margin-bottom: 8px; }
+        .feature-card .title { color: #fff; font-size: 14px; font-weight: 700; }
+        .feature-card .desc { color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 4px; }
+        .lang-toggle {
+            display: flex; justify-content: center; gap: 4px;
+            margin-bottom: 20px; background: rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 4px; width: fit-content; margin-inline: auto;
+        }
+        .lang-btn {
+            padding: 6px 18px; border: none; border-radius: 10px;
+            background: transparent; color: rgba(255,255,255,0.4);
+            font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .lang-btn.active { background: rgba(108,99,255,0.3); color: #fff; }
+        .ar-content, .en-content { display: none; }
+        .ar-content.active, .en-content.active { display: block; }
+        .footer { text-align: center; margin-top: 24px; color: rgba(255,255,255,0.2); font-size: 12px; }
+        @media (max-width: 500px) { .feature-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html" class="active">عن الموقع</a>
+        <a href="privacy.html">الخصوصية</a>
+        <a href="contact.html">تواصل</a>
+    </nav>
+
+    <div class="container">
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+        </div>
+
+        <div class="ar-content active" id="ar">
+            <h1>عن الموقع</h1>
+
+            <p>حاسبة كتلة الجسم والنظام الغذائي هي أداة مجانية تساعدك على معرفة مؤشر كتلة جسمك وتقدم لك نظام غذائي مخصص بناءً على أهدافك وتفضيلاتك الغذائية.</p>
+
+            <h2>مميزات الموقع</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">⚖️</div>
+                    <div class="title">حساب BMI دقيق</div>
+                    <div class="desc">حساب مؤشر كتلة الجسم مع تصنيف فوري</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🍽️</div>
+                    <div class="title">نظام غذائي مخصص</div>
+                    <div class="desc">جدول أسبوعي بناءً على تفضيلاتك</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🌍</div>
+                    <div class="title">عربي وإنجليزي</div>
+                    <div class="desc">واجهة ثنائية اللغة كاملة</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔒</div>
+                    <div class="title">خصوصية تامة</div>
+                    <div class="desc">بياناتك تبقى في متصفحك فقط</div>
+                </div>
+            </div>
+
+            <h2>كيف يعمل؟</h2>
+            <p>يستخدم الموقع معادلة مؤشر كتلة الجسم (BMI) العالمية لحساب نسبة وزنك إلى طولك. ثم يستخدم معادلة Mifflin-St Jeor لحساب السعرات الحرارية اليومية المطلوبة، ويقدم لك نظام غذائي مخصص يراعي:</p>
+            <p>• هدفك (إنقاص، حفاظ، أو زيادة الوزن)<br>
+            • أنواع الأكل المفضلة لديك<br>
+            • أي حساسيات غذائية عندك<br>
+            • عدد الوجبات اللي تفضلها باليوم</p>
+
+            <h2>ملاحظة مهمة</h2>
+            <p>هذا الموقع يقدم معلومات تقديرية للاسترشاد فقط وليس بديلاً عن الاستشارة الطبية. يُنصح دائماً بمراجعة طبيب أو أخصائي تغذية للحصول على خطة مخصصة لحالتك.</p>
+        </div>
+
+        <div class="en-content" id="en">
+            <h1>About</h1>
+
+            <p>BMI & Diet Planner is a free tool that helps you calculate your Body Mass Index and provides a customized diet plan based on your goals and food preferences.</p>
+
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">⚖️</div>
+                    <div class="title">Accurate BMI</div>
+                    <div class="desc">Calculate BMI with instant classification</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🍽️</div>
+                    <div class="title">Custom Diet Plan</div>
+                    <div class="desc">Weekly plan based on your preferences</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🌍</div>
+                    <div class="title">Bilingual</div>
+                    <div class="desc">Full Arabic & English interface</div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔒</div>
+                    <div class="title">Full Privacy</div>
+                    <div class="desc">Your data stays in your browser</div>
+                </div>
+            </div>
+
+            <h2>How It Works</h2>
+            <p>The site uses the international BMI formula to calculate your weight-to-height ratio. It then uses the Mifflin-St Jeor equation to calculate your daily calorie needs, and provides a personalized diet plan that considers:</p>
+            <p>• Your goal (lose, maintain, or gain weight)<br>
+            • Your preferred food types<br>
+            • Any food allergies<br>
+            • Your preferred number of meals per day</p>
+
+            <h2>Important Note</h2>
+            <p>This site provides estimated information for guidance only and is not a substitute for medical advice. Always consult a doctor or nutritionist for a plan tailored to your condition.</p>
+        </div>
+    </div>
+
+    <div class="footer">BMI & Diet Planner</div>
+
+    <script>
+        function setLang(l) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.lang-btn:${l==='ar'?'first':'last'}-child`).classList.add('active');
+            document.getElementById('ar').classList.toggle('active', l==='ar');
+            document.getElementById('en').classList.toggle('active', l==='en');
+            document.documentElement.dir = l==='ar'?'rtl':'ltr';
+        }
+    </script>
+</body>
+</html>

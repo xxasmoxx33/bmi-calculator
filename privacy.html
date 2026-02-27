@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سياسة الخصوصية - حاسبة كتلة الجسم</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh; padding: 20px;
+        }
+        nav {
+            display: flex; justify-content: center; gap: 8px;
+            padding: 16px; flex-wrap: wrap;
+        }
+        nav a {
+            color: rgba(255,255,255,0.5); text-decoration: none;
+            font-size: 14px; font-weight: 600;
+            padding: 8px 18px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        nav a:hover, nav a.active {
+            color: #fff; border-color: #6c63ff;
+            background: rgba(108,99,255,0.15);
+        }
+        .container {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 40px;
+            max-width: 700px; margin: 20px auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #fff; font-size: 28px; text-align: center; margin-bottom: 24px; }
+        h2 { color: #6c63ff; font-size: 18px; margin: 24px 0 10px; }
+        p, li { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.9; }
+        ul { padding-right: 20px; margin-bottom: 12px; }
+        .lang-toggle {
+            display: flex; justify-content: center; gap: 4px;
+            margin-bottom: 20px; background: rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 4px; width: fit-content; margin-inline: auto;
+        }
+        .lang-btn {
+            padding: 6px 18px; border: none; border-radius: 10px;
+            background: transparent; color: rgba(255,255,255,0.4);
+            font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .lang-btn.active { background: rgba(108,99,255,0.3); color: #fff; }
+        .ar-content, .en-content { display: none; }
+        .ar-content.active, .en-content.active { display: block; }
+        .footer { text-align: center; margin-top: 24px; color: rgba(255,255,255,0.2); font-size: 12px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">عن الموقع</a>
+        <a href="privacy.html" class="active">الخصوصية</a>
+        <a href="contact.html">تواصل</a>
+    </nav>
+
+    <div class="container">
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+        </div>
+
+        <div class="ar-content active" id="ar">
+            <h1>سياسة الخصوصية</h1>
+
+            <h2>مقدمة</h2>
+            <p>نحن في موقع حاسبة كتلة الجسم والنظام الغذائي نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. توضح هذه السياسة كيفية جمع واستخدام وحماية معلوماتك.</p>
+
+            <h2>البيانات التي نجمعها</h2>
+            <ul>
+                <li>البيانات التي تدخلها في الحاسبة (الطول، الوزن، العمر) - تُعالج محلياً في متصفحك فقط ولا تُرسل لأي خادم</li>
+                <li>بيانات الاستخدام المجهولة عبر Google Analytics (إن وُجد)</li>
+                <li>ملفات تعريف الارتباط (Cookies) من خدمات الإعلانات</li>
+            </ul>
+
+            <h2>كيف نستخدم البيانات</h2>
+            <ul>
+                <li>تحسين تجربة المستخدم وأداء الموقع</li>
+                <li>عرض إعلانات مناسبة عبر Google AdSense</li>
+                <li>تحليل حركة الزوار لتطوير المحتوى</li>
+            </ul>
+
+            <h2>إعلانات Google AdSense</h2>
+            <p>نستخدم Google AdSense لعرض الإعلانات. قد تستخدم Google وشركاؤها ملفات تعريف الارتباط لعرض إعلانات بناءً على زياراتك السابقة لهذا الموقع أو مواقع أخرى. يمكنك إلغاء الاشتراك في الإعلانات المخصصة من خلال زيارة <a href="https://www.google.com/settings/ads" style="color:#6c63ff">إعدادات إعلانات Google</a>.</p>
+
+            <h2>حماية البيانات</h2>
+            <p>جميع الحسابات تتم داخل متصفحك. لا نخزن أي بيانات صحية شخصية على خوادمنا.</p>
+
+            <h2>حقوقك</h2>
+            <ul>
+                <li>حق الوصول إلى بياناتك</li>
+                <li>حق حذف بياناتك</li>
+                <li>حق رفض ملفات تعريف الارتباط</li>
+            </ul>
+
+            <h2>التواصل</h2>
+            <p>لأي استفسار بخصوص سياسة الخصوصية، تواصل معنا عبر صفحة <a href="contact.html" style="color:#6c63ff">التواصل</a>.</p>
+
+            <p style="margin-top:20px; color:rgba(255,255,255,0.3); font-size:13px;">آخر تحديث: فبراير 2026</p>
+        </div>
+
+        <div class="en-content" id="en">
+            <h1>Privacy Policy</h1>
+
+            <h2>Introduction</h2>
+            <p>At BMI & Diet Planner, we respect your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and protect your information.</p>
+
+            <h2>Data We Collect</h2>
+            <ul>
+                <li>Data you enter in the calculator (height, weight, age) - processed locally in your browser only and never sent to any server</li>
+                <li>Anonymous usage data via Google Analytics (if applicable)</li>
+                <li>Cookies from advertising services</li>
+            </ul>
+
+            <h2>How We Use Data</h2>
+            <ul>
+                <li>Improve user experience and site performance</li>
+                <li>Display relevant ads via Google AdSense</li>
+                <li>Analyze traffic to improve content</li>
+            </ul>
+
+            <h2>Google AdSense</h2>
+            <p>We use Google AdSense to display ads. Google and its partners may use cookies to serve ads based on your prior visits to this or other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" style="color:#6c63ff">Google Ads Settings</a>.</p>
+
+            <h2>Data Protection</h2>
+            <p>All calculations are performed in your browser. We do not store any personal health data on our servers.</p>
+
+            <h2>Your Rights</h2>
+            <ul>
+                <li>Right to access your data</li>
+                <li>Right to delete your data</li>
+                <li>Right to refuse cookies</li>
+            </ul>
+
+            <h2>Contact</h2>
+            <p>For any privacy inquiries, reach us through our <a href="contact.html" style="color:#6c63ff">Contact</a> page.</p>
+
+            <p style="margin-top:20px; color:rgba(255,255,255,0.3); font-size:13px;">Last updated: February 2026</p>
+        </div>
+    </div>
+
+    <div class="footer">BMI & Diet Planner</div>
+
+    <script>
+        function setLang(l) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.lang-btn:${l==='ar'?'first':'last'}-child`).classList.add('active');
+            document.getElementById('ar').classList.toggle('active', l==='ar');
+            document.getElementById('en').classList.toggle('active', l==='en');
+            document.documentElement.dir = l==='ar'?'rtl':'ltr';
+        }
+    </script>
+</body>
+</html>
