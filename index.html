@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة كتلة الجسم BMI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .gender-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .gender-btn {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .gender-btn .icon {
+            font-size: 32px;
+        }
+
+        .gender-btn:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .gender-btn.active {
+            border-color: #6c63ff;
+            background: rgba(108, 99, 255, 0.15);
+            color: #fff;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .input-row input {
+            flex: 1;
+        }
+
+        .input-row .unit {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 30px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #6c63ff;
+        }
+
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .age-input {
+            margin-bottom: 28px;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6c63ff, #4834d4);
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(108, 99, 255, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 28px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .bmi-value {
+            font-size: 56px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .bmi-category {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 8px 0 16px;
+            padding: 8px 24px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .bmi-bar-container {
+            margin: 20px 0;
+            padding: 0 4px;
+        }
+
+        .bmi-bar {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to left, #e74c3c, #f39c12, #2ecc71, #f39c12, #e74c3c);
+            position: relative;
+        }
+
+        .bmi-indicator {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #6c63ff;
+            position: absolute;
+            top: 50%;
+            transform: translate(50%, -50%);
+            transition: right 0.5s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .bmi-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            direction: rtl;
+        }
+
+        .bmi-labels span {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .bmi-description {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 12px;
+        }
+
+        .category-underweight { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .category-normal { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-overweight { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .category-obese { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 28px 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .bmi-value {
+                font-size: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>حاسبة كتلة الجسم</h1>
+            <p>احسب مؤشر كتلة جسمك بسهولة</p>
+        </div>
+
+        <div class="gender-selector">
+            <button class="gender-btn active" onclick="selectGender(this, 'male')">
+                <span class="icon">&#9794;</span>
+                ذكر
+            </button>
+            <button class="gender-btn" onclick="selectGender(this, 'female')">
+                <span class="icon">&#9792;</span>
+                أنثى
+            </button>
+        </div>
+
+        <div class="input-group">
+            <label>الطول</label>
+            <div class="input-row">
+                <input type="number" id="height" placeholder="170" min="50" max="250">
+                <span class="unit">سم</span>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>الوزن</label>
+            <div class="input-row">
+                <input type="number" id="weight" placeholder="70" min="10" max="300">
+                <span class="unit">كجم</span>
+            </div>
+        </div>
+
+        <div class="input-group age-input">
+            <label>العمر</label>
+            <div class="input-row">
+                <input type="number" id="age" placeholder="25" min="2" max="120">
+                <span class="unit">سنة</span>
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateBMI()">احسب</button>
+
+        <div class="result" id="result">
+            <div class="bmi-value" id="bmiValue">0</div>
+            <div class="bmi-category" id="bmiCategory">-</div>
+
+            <div class="bmi-bar-container">
+                <div class="bmi-bar">
+                    <div class="bmi-indicator" id="bmiIndicator"></div>
+                </div>
+                <div class="bmi-labels">
+                    <span>نحيف</span>
+                    <span>طبيعي</span>
+                    <span>زيادة</span>
+                    <span>سمنة</span>
+                </div>
+            </div>
+
+            <div class="bmi-description" id="bmiDescription"></div>
+        </div>
+
+        <div class="footer">
+            حاسبة كتلة الجسم &mdash; BMI Calculator
+        </div>
+    </div>
+
+    <script>
+        let selectedGender = 'male';
+
+        function selectGender(btn, gender) {
+            document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedGender = gender;
+        }
+
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseFloat(document.getElementById('age').value);
+
+            if (!height || !weight || !age) {
+                shakeButton();
+                return;
+            }
+
+            if (height < 50 || height > 250 || weight < 10 || weight > 300 || age < 2 || age > 120) {
+                shakeButton();
+                return;
+            }
+
+            const heightM = height / 100;
+            const bmi = weight / (heightM * heightM);
+            const bmiRounded = Math.round(bmi * 10) / 10;
+
+            let category, categoryClass, description;
+
+            if (bmi < 18.5) {
+                category = 'نقص في الوزن';
+                categoryClass = 'category-underweight';
+                description = 'وزنك أقل من الطبيعي. حاول زيادة وزنك بتناول وجبات صحية ومتوازنة غنية بالبروتين والكربوهيدرات.';
+            } else if (bmi < 25) {
+                category = 'وزن طبيعي';
+                categoryClass = 'category-normal';
+                description = 'وزنك مثالي! حافظ على نمط حياتك الصحي واستمر في ممارسة الرياضة والتغذية المتوازنة.';
+            } else if (bmi < 30) {
+                category = 'زيادة في الوزن';
+                categoryClass = 'category-overweight';
+                description = 'لديك زيادة في الوزن. حاول ممارسة الرياضة بانتظام وتقليل السعرات الحرارية مع اتباع نظام غذائي صحي.';
+            } else {
+                category = 'سمنة';
+                categoryClass = 'category-obese';
+                description = 'لديك سمنة. يُنصح بمراجعة طبيب أو أخصائي تغذية لوضع خطة مناسبة لإنقاص الوزن بطريقة صحية.';
+            }
+
+            const resultEl = document.getElementById('result');
+            const bmiValueEl = document.getElementById('bmiValue');
+            const bmiCategoryEl = document.getElementById('bmiCategory');
+            const bmiDescEl = document.getElementById('bmiDescription');
+            const bmiIndicator = document.getElementById('bmiIndicator');
+
+            resultEl.classList.add('show');
+
+            animateValue(bmiValueEl, 0, bmiRounded, 600);
+
+            bmiCategoryEl.textContent = category;
+            bmiCategoryEl.className = 'bmi-category ' + categoryClass;
+
+            bmiDescEl.textContent = description;
+
+            const minBMI = 15;
+            const maxBMI = 40;
+            let position = ((bmi - minBMI) / (maxBMI - minBMI)) * 100;
+            position = Math.max(2, Math.min(98, position));
+            bmiIndicator.style.right = position + '%';
+
+            resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function animateValue(el, start, end, duration) {
+            let startTime = null;
+            function update(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = start + (end - start) * eased;
+                el.textContent = current.toFixed(1);
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        function shakeButton() {
+            const btn = document.querySelector('.calculate-btn');
+            btn.style.animation = 'shake 0.4s ease';
+            setTimeout(() => btn.style.animation = '', 400);
+        }
+
+        const shakeStyle = document.createElement('style');
+        shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-8px); }
+                75% { transform: translateX(8px); }
+            }
+        `;
+        document.head.appendChild(shakeStyle);
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') calculateBMI();
+            });
+        });
+    </script>
+</body>
+</html>
